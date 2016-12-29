@@ -1,0 +1,11 @@
+<resources>
+    <!-- GENERAL -->
+    <string name="app_name">Movies</string>
+
+    <!-- MOVIE LIST -->
+    <string name="add_movies">Add Movie</string>
+
+    <!-- MOVIE DETAIL -->
+    <string name="title_movie_detail">Movie Detail</string>
+
+</resources>
