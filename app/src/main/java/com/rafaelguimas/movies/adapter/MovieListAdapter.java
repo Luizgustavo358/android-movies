@@ -7,13 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rafaelguimas.movies.R;
 import com.rafaelguimas.movies.activity.MovieDetailActivity;
 import com.rafaelguimas.movies.activity.MovieListActivity;
-import com.rafaelguimas.movies.dummy.DummyContent;
 import com.rafaelguimas.movies.fragment.MovieDetailFragment;
+import com.rafaelguimas.movies.model.Movie;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -22,34 +24,39 @@ import java.util.List;
  */
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ViewHolder> {
 
-    private final List<DummyContent.DummyItem> mValues;
+    private final List<Movie> movieList;
     private final boolean isTwoPanel;
     private final Context context;
 
-    public MovieListAdapter(Context context, List<DummyContent.DummyItem> items, boolean isTwoPanel) {
+    public MovieListAdapter(Context context, List<Movie> movieList, boolean isTwoPanel) {
         this.context = context;
-        this.mValues = items;
+        this.movieList = movieList;
         this.isTwoPanel = isTwoPanel;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_list_content, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_list_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.tvTitle.setText(movieList.get(position).getTitle());
+        holder.tvYear.setText(movieList.get(position).getYear());
 
+        Picasso.with(context)
+                .load(movieList.get(position).getPoster())
+                .placeholder(R.drawable.img_movie_placeholder)
+                .into(holder.imgPoster);
+
+        final int finalPosition = position;
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isTwoPanel) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(MovieDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                    arguments.putParcelable(MovieDetailFragment.ARG_MOVIE, movieList.get(finalPosition));
                     MovieDetailFragment fragment = new MovieDetailFragment();
                     fragment.setArguments(arguments);
                     ((MovieListActivity) context).getSupportFragmentManager().beginTransaction()
@@ -58,7 +65,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
                 } else {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, MovieDetailActivity.class);
-                    intent.putExtra(MovieDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                    intent.putExtra(MovieDetailFragment.ARG_MOVIE, movieList.get(finalPosition));
 
                     context.startActivity(intent);
                 }
@@ -68,28 +75,24 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return movieList.size();
     }
 
     /**
      * ViewHolder responsavel por mapear os elementos visuais do item
      * */
     class ViewHolder extends RecyclerView.ViewHolder {
-        final View mView;
-        final TextView mIdView;
-        final TextView mContentView;
-        DummyContent.DummyItem mItem;
+        View mView;
+        ImageView imgPoster;
+        TextView tvTitle;
+        TextView tvYear;
 
         ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            imgPoster = (ImageView) view.findViewById(R.id.img_thumbnail);
+            tvTitle = (TextView) view.findViewById(R.id.tv_title);
+            tvYear = (TextView) view.findViewById(R.id.tv_year);
         }
     }
 }

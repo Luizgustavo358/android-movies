@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.rafaelguimas.movies.R;
 import com.rafaelguimas.movies.activity.MovieDetailActivity;
 import com.rafaelguimas.movies.activity.MovieListActivity;
-import com.rafaelguimas.movies.dummy.DummyContent;
+import com.rafaelguimas.movies.model.Movie;
 
 /**
  * A fragment representing a single Movie detail screen.
@@ -21,21 +21,14 @@ import com.rafaelguimas.movies.dummy.DummyContent;
  * on handsets.
  */
 public class MovieDetailFragment extends Fragment {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
-    public static final String ARG_ITEM_ID = "item_id";
+    
+    // ID do argumento que contem os detalhes do filme
+    public static final String ARG_MOVIE = "movie";
+    
+    // Filme a ser exibido
+    public Movie movie;
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private DummyContent.DummyItem mItem;
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+    // Obrigatorio
     public MovieDetailFragment() {
     }
 
@@ -43,16 +36,16 @@ public class MovieDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
+        if (getArguments().containsKey(ARG_MOVIE)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            movie = getArguments().getParcelable(ARG_MOVIE);
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
+                appBarLayout.setTitle(movie.getTitle());
             }
         }
     }
@@ -63,8 +56,8 @@ public class MovieDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.movie_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.movie_detail)).setText(mItem.details);
+        if (movie != null) {
+            ((TextView) rootView.findViewById(R.id.movie_detail)).setText(movie.getDirector());
         }
 
         return rootView;

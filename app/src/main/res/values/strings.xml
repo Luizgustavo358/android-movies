@@ -3,7 +3,17 @@
     <string name="app_name">Movies</string>
 
     <!-- MOVIE LIST -->
-    <string name="add_movies">Add Movie</string>
+    <string name="title_movie_list">Minha biblioteca</string>
+    <string name="add_movies">Adicionar filme</string>
+    <string name="title_dialog_add">Adicionar filme</string>
+    <string name="title_dialog_details">Detalhes</string>
+    <string name="hint_movie_title">Título do filme</string>
+    <string name="action_search">Buscar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_add">Adicionar</string>
+    <string name="action_add_new_movie">Adicionar novo filme</string>
+    <string name="empty_library">Sua bibloteca de filmes esta vazia</string>
+    <string name="movie_not_found">Filme não encontrado. Tente novamente.</string>
 
     <!-- MOVIE DETAIL -->
     <string name="title_movie_detail">Movie Detail</string>
