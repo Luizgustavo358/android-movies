@@ -1,9 +1,9 @@
 <resources>
     <!-- GENERAL -->
-    <string name="app_name">Movies</string>
+    <string name="app_name">Meus filmes</string>
 
     <!-- MOVIE LIST -->
-    <string name="title_movie_list">Minha biblioteca</string>
+    <string name="title_movie_list">Meus filmes</string>
     <string name="add_movies">Adicionar filme</string>
     <string name="title_dialog_add">Adicionar filme</string>
     <string name="title_dialog_details">Detalhes</string>
@@ -16,6 +16,7 @@
     <string name="movie_not_found">Filme não encontrado. Tente novamente.</string>
 
     <!-- MOVIE DETAIL -->
-    <string name="title_movie_detail">Movie Detail</string>
+    <string name="title_movie_detail">Sobre o filme</string>
+    <string name="imdb_rating">IMDB Rating:</string>
 
 </resources>

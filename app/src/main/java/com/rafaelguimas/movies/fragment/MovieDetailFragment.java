@@ -4,15 +4,19 @@ import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rafaelguimas.movies.R;
 import com.rafaelguimas.movies.activity.MovieDetailActivity;
 import com.rafaelguimas.movies.activity.MovieListActivity;
 import com.rafaelguimas.movies.model.Movie;
+import com.squareup.picasso.Picasso;
 
 /**
  * A fragment representing a single Movie detail screen.
@@ -41,12 +45,6 @@ public class MovieDetailFragment extends Fragment {
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             movie = getArguments().getParcelable(ARG_MOVIE);
-
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(movie.getTitle());
-            }
         }
     }
 
@@ -55,10 +53,19 @@ public class MovieDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.movie_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
-        if (movie != null) {
-            ((TextView) rootView.findViewById(R.id.movie_detail)).setText(movie.getDirector());
-        }
+        // Busca os elementos da tela
+        ImageView imgPoster = (ImageView) rootView.findViewById(R.id.img_thumbnail);
+        TextView tvMovieTitle = (TextView) rootView.findViewById(R.id.tv_title);
+        TextView tvMovieYear = (TextView) rootView.findViewById(R.id.tv_year);
+        TextView tvImdbRating = (TextView) rootView.findViewById(R.id.tv_imdb_rating);
+        TextView tvDirector = (TextView) rootView.findViewById(R.id.tv_director);
+
+        // Define os valores do filme
+        Picasso.with(getContext()).load(movie.getPoster()).into(imgPoster);
+        tvMovieTitle.setText(movie.getTitle());
+        tvMovieYear.setText(movie.getYear());
+        tvImdbRating.setText(movie.getImdbRating());
+        tvDirector.setText(movie.getDirector());
 
         return rootView;
     }

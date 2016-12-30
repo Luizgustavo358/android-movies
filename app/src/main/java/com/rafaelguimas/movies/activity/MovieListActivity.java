@@ -2,6 +2,8 @@ package com.rafaelguimas.movies.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,12 +19,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rafaelguimas.movies.R;
 import com.rafaelguimas.movies.adapter.MovieListAdapter;
 import com.rafaelguimas.movies.api.OMDBClient;
 import com.rafaelguimas.movies.api.OMDBInterface;
+import com.rafaelguimas.movies.db.MovieDAO;
 import com.rafaelguimas.movies.model.Movie;
 import com.rafaelguimas.movies.model.MovieList;
 import com.squareup.picasso.Picasso;
@@ -35,12 +37,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MovieListActivity extends AppCompatActivity {
-    // TAG
+
+    // TAG para logs
     private static final String TAG = "MovieListActivity";
 
     // Flag para indicar o tipo de visualizacao
     private boolean isTwoPanel;
 
+    // Variaveis de controle
+    private CoordinatorLayout coordinatorLayout;
     private LinearLayout layoutEmpty;
     private RecyclerView recyclerView;
     private MovieListAdapter adapter;
@@ -53,8 +58,17 @@ public class MovieListActivity extends AppCompatActivity {
 
         // Setup da toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.title_movie_list);
+        setSupportActionBar(toolbar);
+
+        // Recupera o Coordinator Layout para os Snacks
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
+
+        // Verifica se a view de detail esta presente na tela (tablet layout)
+        if (findViewById(R.id.movie_detail_container) != null) {
+            // Ativa a flag de twopanel devido a view estar presente
+            isTwoPanel = true;
+        }
 
         // Recupera o layout de lista vazia
         layoutEmpty = (LinearLayout) findViewById(R.id.layout_empty);
@@ -77,11 +91,8 @@ public class MovieListActivity extends AppCompatActivity {
         // Define o adaptador no RV
         recyclerView.setAdapter(adapter);
 
-        // Verifica se a view de detail esta presente na tela (tablet layout)
-        if (findViewById(R.id.movie_detail_container) != null) {
-            // Ativa a flag de twopanel devido a view estar presente
-            isTwoPanel = true;
-        }
+        // Carrega os filmes do BD local
+        showMovies();
 
         // Busca a lista
 //        getMoviesBySearch("Batman");
@@ -171,7 +182,7 @@ public class MovieListActivity extends AppCompatActivity {
                     showDialogMovieDetails(movie);
                 } else {
                     // Exibe mensagem de falha
-                    Toast.makeText(MovieListActivity.this, R.string.movie_not_found, Toast.LENGTH_LONG).show();
+                    Snackbar.make(coordinatorLayout, R.string.movie_not_found, Snackbar.LENGTH_LONG).show();
                 }
             }
 
@@ -220,17 +231,37 @@ public class MovieListActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // Recupera o filme da resposta da API
+                        // Salva o filme novo no BD
+                        MovieDAO movieDAO = new MovieDAO(MovieListActivity.this);
+                        movieDAO.saveMovie(movie);
+
+                        // Adiciona o filme novo na lista
                         movieList.add(movie);
-                        // Verifica se foi encontrado
-                        assert recyclerView != null;
                         // Atualiza a lista
                         adapter.notifyDataSetChanged();
+
                         // Esconde o layout de lista vazia
-                        layoutEmpty.setVisibility(View.GONE);
+                        if (layoutEmpty.getVisibility() == View.VISIBLE) {
+                            layoutEmpty.setVisibility(View.GONE);
+                        }
                     }
                 })
                 .setNegativeButton(R.string.action_cancel, null)
                 .show();
+    }
+
+    public void showMovies() {
+        // Busca os filmes no BD local
+        MovieDAO movieDAO = new MovieDAO(this);
+        movieList.clear();
+        movieList.addAll(movieDAO.loadMovies());
+
+        if (movieList.size() > 0) {
+            // Esconde layout de lista vazia
+            layoutEmpty.setVisibility(View.GONE);
+
+            // Atualiza a lista
+            adapter.notifyDataSetChanged();
+        }
     }
 }

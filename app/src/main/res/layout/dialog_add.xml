@@ -10,5 +10,6 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/etxt_movie_title"
-        android:hint="@string/hint_movie_title" />
+        android:hint="@string/hint_movie_title"
+        android:singleLine="true" />
 </LinearLayout>

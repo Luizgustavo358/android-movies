@@ -51,6 +51,8 @@ public class Movie implements Parcelable{
     private String Type;
     private String Response;
 
+    public Movie() {}
+
     public Movie(String title, String year, String rated, String released, String runtime, String genre, String director, String writer, String actors, String plot, String language, String contry, String awards, String poster, String metascore, String imdbRating, String imdbVotes, String imdbID, String type, String response) {
         Title = title;
         Year = year;
