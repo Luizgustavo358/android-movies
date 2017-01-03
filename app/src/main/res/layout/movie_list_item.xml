@@ -42,23 +42,17 @@
 
         <TextView
             android:id="@+id/tv_title"
-            style="@style/TextAppearance.AppCompat.Subhead"
             android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Clube da Luta"
-            android:ellipsize="end"
-            android:maxLines="4"
+            tools:text="Título"
             android:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/tv_year"
-            style="@style/TextAppearance.AppCompat.Body2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="2016"
-            android:maxLines="1"
-            android:ellipsize="end"
+            tools:text="Ano"
             android:textColor="@android:color/white" />
     </LinearLayout>
 

@@ -21,10 +21,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rafaelguimas.movies.R;
+import com.rafaelguimas.movies.Util;
 import com.rafaelguimas.movies.adapter.MovieListAdapter;
 import com.rafaelguimas.movies.api.OMDBClient;
 import com.rafaelguimas.movies.api.OMDBInterface;
 import com.rafaelguimas.movies.db.MovieDAO;
+import com.rafaelguimas.movies.fragment.MovieDetailFragment;
 import com.rafaelguimas.movies.model.Movie;
 import com.rafaelguimas.movies.model.MovieList;
 import com.squareup.picasso.Picasso;
@@ -32,6 +34,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,10 +48,13 @@ public class MovieListActivity extends AppCompatActivity {
     // Flag para indicar o tipo de visualizacao
     private boolean isTwoPanel;
 
+    // Views
+    @BindView(R.id.coordinator_layout) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.layout_empty) LinearLayout layoutEmpty;
+    @BindView(R.id.btn_add_movie) Button btnAddMovie;
+    @BindView(R.id.rv_movie_list) RecyclerView recyclerView;
+
     // Variaveis de controle
-    private CoordinatorLayout coordinatorLayout;
-    private LinearLayout layoutEmpty;
-    private RecyclerView recyclerView;
     private MovieListAdapter adapter;
     private List<Movie> movieList = new ArrayList<>();
 
@@ -56,13 +63,13 @@ public class MovieListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
 
+        // Conecta os elementos da tela
+        ButterKnife.bind(this);
+
         // Setup da toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_movie_list);
         setSupportActionBar(toolbar);
-
-        // Recupera o Coordinator Layout para os Snacks
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
 
         // Verifica se a view de detail esta presente na tela (tablet layout)
         if (findViewById(R.id.movie_detail_container) != null) {
@@ -70,11 +77,14 @@ public class MovieListActivity extends AppCompatActivity {
             isTwoPanel = true;
         }
 
-        // Recupera o layout de lista vazia
-        layoutEmpty = (LinearLayout) findViewById(R.id.layout_empty);
+        // Exibe layout de detalhes vazio
+        if (isTwoPanel) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, new MovieDetailFragment())
+                    .commit();
+        }
 
         // Recupera o botao de adicionar novo filme
-        Button btnAddMovie = (Button) findViewById(R.id.btn_add_movie);
         btnAddMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,9 +92,8 @@ public class MovieListActivity extends AppCompatActivity {
             }
         });
 
-        // Recupera o RV
-        recyclerView = (RecyclerView) findViewById(R.id.rv_movie_list);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        // Define o layout da RV
+        recyclerView.setLayoutManager(new GridLayoutManager(this, isTwoPanel? 5 : 3));
 
         // Cria o adaptador
         adapter = new MovieListAdapter(MovieListActivity.this, movieList, isTwoPanel);
@@ -94,13 +103,12 @@ public class MovieListActivity extends AppCompatActivity {
         // Carrega os filmes do BD local
         showMovies();
 
-        // Busca a lista
-//        getMoviesBySearch("Batman");
-//        getMoviesByTitle("Batman");
+//        saveMoviesBySearch("Batman");
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Infla o menu da tela
         getMenuInflater().inflate(R.menu.menu_movie_list, menu);
 
         return true;
@@ -117,53 +125,43 @@ public class MovieListActivity extends AppCompatActivity {
         return true;
     }
 
-    public void getMoviesBySearch(String searchText) {
-        OMDBInterface omdbInterface = OMDBClient.getClient().create(OMDBInterface.class);
-        Call<MovieList> call = omdbInterface.getMoviesBySearch(searchText);
-        call.enqueue(new Callback<MovieList>() {
-            @Override
-            public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-                Log.d(TAG, "API " + (response.isSuccessful()? "success" : "error"));
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-                // Recupera a lista de filmes da resposta da API
-                MovieList movieList = response.body();
-                // Verifica se foi encontrado
-                assert recyclerView != null;
-                // Cria o adaptador
-                MovieListAdapter adapter = new MovieListAdapter(MovieListActivity.this, movieList.getSearch(), isTwoPanel);
-                // Define o adaptador no RV
-                recyclerView.setAdapter(adapter);
-            }
+        // Guarda o tamanho da lista antes de atualizar
+        final List<Movie> oldMovieList = new ArrayList<>();
+        oldMovieList.addAll(movieList);
 
-            @Override
-            public void onFailure(Call<MovieList> call, Throwable t) {
+        // Atualiza a lista
+        showMovies();
 
-            }
-        });
-    }
+        // Verifica se alguma remocao foi feita
+        if (movieList.size() < oldMovieList.size()) {
+            // Exibe mensagem de sucesso na remocao
+            Snackbar.make(coordinatorLayout, R.string.movie_del_success, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.undo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // Busca os filmes deletados
+                            Movie deletedMovie = Util.getDeletedMovie(movieList, oldMovieList);
 
-    public void getMoviesByTitle(String title) {
-        OMDBInterface omdbInterface = OMDBClient.getClient().create(OMDBInterface.class);
-        Call<Movie> call = omdbInterface.getMoviesByTitle(title);
-        call.enqueue(new Callback<Movie>() {
-            @Override
-            public void onResponse(Call<Movie> call, Response<Movie> response) {
-                Log.d(TAG, "API " + (response.isSuccessful()? "success" : "error"));
+                            // Verifica se foi encontrado o filme deletado
+                            if (deletedMovie != null) {
+                                // Readiciona o filme deletado
+                                MovieDAO movieDAO = new MovieDAO(MovieListActivity.this);
+                                movieDAO.saveMovie(deletedMovie);
 
-                // Recupera o filme da resposta da API
-                Movie movie = response.body();
-                movieList.add(movie);
-                // Verifica se foi encontrado
-                assert recyclerView != null;
-                // Atualiza a lista
-                adapter.notifyDataSetChanged();
-            }
+                                // Exibe mensagem de sucesso
+                                Snackbar.make(coordinatorLayout, R.string.movie_recover_success, Snackbar.LENGTH_SHORT).show();
 
-            @Override
-            public void onFailure(Call<Movie> call, Throwable t) {
-
-            }
-        });
+                                // Atualiza a lista
+                                showMovies();
+                            }
+                        }
+                    })
+                    .show();
+        }
     }
 
     public void showMovieByTitle(String title) {
@@ -173,6 +171,7 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Movie> call, Response<Movie> response) {
                 Log.d(TAG, "API " + (response.isSuccessful()? "success" : "error"));
+//                Util.dismissProgressDialog();
 
                 // Recupera o filme da resposta da API
                 Movie movie = response.body();
@@ -204,6 +203,7 @@ public class MovieListActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_search, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+//                        Util.showProgressDialog(MovieListActivity.this, getString(R.string.searching_movie));
                         showMovieByTitle(((EditText) view.findViewById(R.id.etxt_movie_title)).getText().toString());
                     }
                 })
@@ -231,18 +231,37 @@ public class MovieListActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // Salva o filme novo no BD
-                        MovieDAO movieDAO = new MovieDAO(MovieListActivity.this);
-                        movieDAO.saveMovie(movie);
+                        // Verifica se o filme ja esta na biblioteca
+                        if (!Util.movieListContainsMovie(movieList, movie)) {
+                            // Salva o filme novo no BD
+                            MovieDAO movieDAO = new MovieDAO(MovieListActivity.this);
+                            movieDAO.saveMovie(movie);
 
-                        // Adiciona o filme novo na lista
-                        movieList.add(movie);
-                        // Atualiza a lista
-                        adapter.notifyDataSetChanged();
+                            // Adiciona o filme novo na lista
+                            movieList.add(movie);
+                            // Atualiza a lista
+//                            adapter.notifyItemInserted(movieList.size() - 1);
+                            adapter.notifyDataSetChanged();
 
-                        // Esconde o layout de lista vazia
-                        if (layoutEmpty.getVisibility() == View.VISIBLE) {
-                            layoutEmpty.setVisibility(View.GONE);
+
+                            // Esconde o layout de lista vazia
+                            if (layoutEmpty.getVisibility() == View.VISIBLE) {
+                                layoutEmpty.setVisibility(View.GONE);
+                            }
+
+                            // Exibe mensagem de sucesso
+                            Snackbar.make(coordinatorLayout, R.string.movie_add_success, Snackbar.LENGTH_LONG)
+                                    .setAction(R.string.show, new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            // Rola a tela para a ultima posicao da lista de filmes
+                                            recyclerView.smoothScrollToPosition(movieList.size()-1);
+                                        }
+                                    })
+                                    .show();
+                        } else {
+                            // Exibe mensagem de sucesso
+                            Snackbar.make(coordinatorLayout, R.string.movie_duplicated, Snackbar.LENGTH_LONG).show();
                         }
                     }
                 })
@@ -263,5 +282,64 @@ public class MovieListActivity extends AppCompatActivity {
             // Atualiza a lista
             adapter.notifyDataSetChanged();
         }
+    }
+
+    public void notifyAdapterRemove(Movie movie) {
+        // Mostra a animacao de exclusao
+        adapter.notifyItemRemoved(movieList.indexOf(movie));
+        // Remove o filme da lista
+        movieList.remove(movie);
+    }
+
+    public void saveMoviesBySearch(String searchText) {
+        OMDBInterface omdbInterface = OMDBClient.getClient().create(OMDBInterface.class);
+        Call<MovieList> call = omdbInterface.getMoviesBySearch(searchText);
+        call.enqueue(new Callback<MovieList>() {
+            @Override
+            public void onResponse(Call<MovieList> call, Response<MovieList> response) {
+                Log.d(TAG, "API " + (response.isSuccessful()? "success" : "error"));
+
+                // Recupera a lista de filmes da resposta da API
+                MovieList movieList = response.body();
+
+                // Salva a lista no BD local
+                MovieDAO movieDAO = new MovieDAO(MovieListActivity.this);
+                for (Movie movie : movieList.getSearch()) {
+                    movieDAO.saveMovie(movie);
+                }
+
+                // Atualiza a lista
+                showMovies();
+            }
+
+            @Override
+            public void onFailure(Call<MovieList> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void getMoviesByTitle(String title) {
+        OMDBInterface omdbInterface = OMDBClient.getClient().create(OMDBInterface.class);
+        Call<Movie> call = omdbInterface.getMoviesByTitle(title);
+        call.enqueue(new Callback<Movie>() {
+            @Override
+            public void onResponse(Call<Movie> call, Response<Movie> response) {
+                Log.d(TAG, "API " + (response.isSuccessful()? "success" : "error"));
+
+                // Recupera o filme da resposta da API
+                Movie movie = response.body();
+                movieList.add(movie);
+                // Verifica se foi encontrado
+                assert recyclerView != null;
+                // Atualiza a lista
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<Movie> call, Throwable t) {
+
+            }
+        });
     }
 }

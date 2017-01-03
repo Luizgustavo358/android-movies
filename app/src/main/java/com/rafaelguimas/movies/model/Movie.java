@@ -9,7 +9,9 @@ import android.os.Parcelable;
 
 public class Movie implements Parcelable{
 
-    /*"Title":"Pirates",
+    /* Exemplo de retorno da API
+
+   "Title":"Pirates",
    "Year":"1986",
    "Rated":"PG-13",
    "Released":"18 Jul 1986",
@@ -28,7 +30,9 @@ public class Movie implements Parcelable{
    "imdbVotes":"6,235",
    "imdbID":"tt0091757",
    "Type":"movie",
-   "Response":"True"*/
+   "Response":"True"
+
+   */
 
     private String Title;
     private String Year;
@@ -41,7 +45,7 @@ public class Movie implements Parcelable{
     private String Actors;
     private String Plot;
     private String Language;
-    private String Contry;
+    private String Country;
     private String Awards;
     private String Poster;
     private String Metascore;
@@ -52,29 +56,6 @@ public class Movie implements Parcelable{
     private String Response;
 
     public Movie() {}
-
-    public Movie(String title, String year, String rated, String released, String runtime, String genre, String director, String writer, String actors, String plot, String language, String contry, String awards, String poster, String metascore, String imdbRating, String imdbVotes, String imdbID, String type, String response) {
-        Title = title;
-        Year = year;
-        Rated = rated;
-        Released = released;
-        Runtime = runtime;
-        Genre = genre;
-        Director = director;
-        Writer = writer;
-        Actors = actors;
-        Plot = plot;
-        Language = language;
-        Contry = contry;
-        Awards = awards;
-        Poster = poster;
-        Metascore = metascore;
-        this.imdbRating = imdbRating;
-        this.imdbVotes = imdbVotes;
-        this.imdbID = imdbID;
-        Type = type;
-        Response = response;
-    }
 
     protected Movie(Parcel in) {
         Title = in.readString();
@@ -88,7 +69,7 @@ public class Movie implements Parcelable{
         Actors = in.readString();
         Plot = in.readString();
         Language = in.readString();
-        Contry = in.readString();
+        Country = in.readString();
         Awards = in.readString();
         Poster = in.readString();
         Metascore = in.readString();
@@ -129,7 +110,7 @@ public class Movie implements Parcelable{
         parcel.writeString(Actors);
         parcel.writeString(Plot);
         parcel.writeString(Language);
-        parcel.writeString(Contry);
+        parcel.writeString(Country);
         parcel.writeString(Awards);
         parcel.writeString(Poster);
         parcel.writeString(Metascore);
@@ -228,12 +209,12 @@ public class Movie implements Parcelable{
         Language = language;
     }
 
-    public String getContry() {
-        return Contry;
+    public String getCountry() {
+        return Country;
     }
 
-    public void setContry(String contry) {
-        Contry = contry;
+    public void setCountry(String country) {
+        Country = country;
     }
 
     public String getAwards() {

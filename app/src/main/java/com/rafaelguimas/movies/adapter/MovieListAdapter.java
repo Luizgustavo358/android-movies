@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +29,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
     private final List<Movie> movieList;
     private final boolean isTwoPanel;
     private final Context context;
+    private int lastPosition = -1;
 
     public MovieListAdapter(Context context, List<Movie> movieList, boolean isTwoPanel) {
         this.context = context;
@@ -42,21 +45,28 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        // Define os textos de descricao do filme
         holder.tvTitle.setText(movieList.get(position).getTitle());
         holder.tvYear.setText(movieList.get(position).getYear());
 
+        // Busca a imagem da URL e exibe no ImageView
         Picasso.with(context)
                 .load(movieList.get(position).getPoster())
                 .placeholder(R.drawable.img_movie_placeholder)
                 .into(holder.imgPoster);
 
+        setAnimation(holder.itemView, position);
+
+        // Define o click do item
         final int finalPosition = position;
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Verifica se o layout possui dois paineis
                 if (isTwoPanel) {
                     Bundle arguments = new Bundle();
                     arguments.putParcelable(MovieDetailFragment.ARG_MOVIE, movieList.get(finalPosition));
+                    arguments.putBoolean(MovieDetailFragment.ARG_IS_TWO_PANEL, isTwoPanel);
                     MovieDetailFragment fragment = new MovieDetailFragment();
                     fragment.setArguments(arguments);
                     ((MovieListActivity) context).getSupportFragmentManager().beginTransaction()
@@ -66,6 +76,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
                     Context context = v.getContext();
                     Intent intent = new Intent(context, MovieDetailActivity.class);
                     intent.putExtra(MovieDetailFragment.ARG_MOVIE, movieList.get(finalPosition));
+                    intent.putExtra(MovieDetailFragment.ARG_IS_TWO_PANEL, isTwoPanel);
 
                     context.startActivity(intent);
                 }
@@ -76,6 +87,26 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
     @Override
     public int getItemCount() {
         return movieList.size();
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+
+        // Limpa a animacao
+        holder.itemView.clearAnimation();
+    }
+
+    /**
+     * Here is the key method to apply the animation
+     */
+    private void setAnimation(View viewToAnimate, int position) {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     /**

@@ -21,7 +21,7 @@ public class MovieDB implements BaseColumns {
     public static final String COLUMN_NAME_ACTORS = "actors";
     public static final String COLUMN_NAME_PLOT = "plot";
     public static final String COLUMN_NAME_LANGUAGE = "language";
-    public static final String COLUMN_NAME_CONTRY = "contry";
+    public static final String COLUMN_NAME_COUNTRY = "country";
     public static final String COLUMN_NAME_AWARDS = "awards";
     public static final String COLUMN_NAME_POSTER_URL = "poster_url";
     public static final String COLUMN_NAME_METASCORE = "metascore";
@@ -47,7 +47,7 @@ public class MovieDB implements BaseColumns {
                 COLUMN_NAME_ACTORS + TEXT_TYPE + COMMA_SEP +
                 COLUMN_NAME_PLOT  + TEXT_TYPE + COMMA_SEP +
                 COLUMN_NAME_LANGUAGE + TEXT_TYPE + COMMA_SEP +
-                COLUMN_NAME_CONTRY + TEXT_TYPE + COMMA_SEP +
+                COLUMN_NAME_COUNTRY + TEXT_TYPE + COMMA_SEP +
                 COLUMN_NAME_AWARDS + TEXT_TYPE + COMMA_SEP +
                 COLUMN_NAME_POSTER_URL + TEXT_TYPE + COMMA_SEP +
                 COLUMN_NAME_METASCORE + TEXT_TYPE + COMMA_SEP +

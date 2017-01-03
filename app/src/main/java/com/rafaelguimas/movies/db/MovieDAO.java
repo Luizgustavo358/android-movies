@@ -44,7 +44,7 @@ public class MovieDAO {
         values.put(MovieDB.COLUMN_NAME_ACTORS, movie.getActors());
         values.put(MovieDB.COLUMN_NAME_PLOT, movie.getPlot());
         values.put(MovieDB.COLUMN_NAME_LANGUAGE, movie.getLanguage());
-        values.put(MovieDB.COLUMN_NAME_CONTRY, movie.getContry());
+        values.put(MovieDB.COLUMN_NAME_COUNTRY, movie.getCountry());
         values.put(MovieDB.COLUMN_NAME_AWARDS, movie.getAwards());
         values.put(MovieDB.COLUMN_NAME_POSTER_URL, movie.getPoster());
         values.put(MovieDB.COLUMN_NAME_METASCORE, movie.getMetascore());
@@ -73,7 +73,7 @@ public class MovieDAO {
                 MovieDB.COLUMN_NAME_ACTORS,
                 MovieDB.COLUMN_NAME_PLOT,
                 MovieDB.COLUMN_NAME_LANGUAGE,
-                MovieDB.COLUMN_NAME_CONTRY,
+                MovieDB.COLUMN_NAME_COUNTRY,
                 MovieDB.COLUMN_NAME_AWARDS,
                 MovieDB.COLUMN_NAME_POSTER_URL,
                 MovieDB.COLUMN_NAME_METASCORE,
@@ -107,7 +107,7 @@ public class MovieDAO {
             movie.setActors(cursor.getString(cursor.getColumnIndex(MovieDB.COLUMN_NAME_ACTORS)));
             movie.setPlot(cursor.getString(cursor.getColumnIndex(MovieDB.COLUMN_NAME_PLOT)));
             movie.setLanguage(cursor.getString(cursor.getColumnIndex(MovieDB.COLUMN_NAME_LANGUAGE)));
-            movie.setContry(cursor.getString(cursor.getColumnIndex(MovieDB.COLUMN_NAME_CONTRY)));
+            movie.setCountry(cursor.getString(cursor.getColumnIndex(MovieDB.COLUMN_NAME_COUNTRY)));
             movie.setAwards(cursor.getString(cursor.getColumnIndex(MovieDB.COLUMN_NAME_AWARDS)));
             movie.setPoster(cursor.getString(cursor.getColumnIndex(MovieDB.COLUMN_NAME_POSTER_URL)));
             movie.setMetascore(cursor.getString(cursor.getColumnIndex(MovieDB.COLUMN_NAME_METASCORE)));

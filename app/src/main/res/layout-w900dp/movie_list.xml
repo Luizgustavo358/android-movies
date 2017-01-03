@@ -7,7 +7,8 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="com.rafaelguimas.movies.activity.MovieListActivity">
+    tools:context="com.rafaelguimas.movies.activity.MovieListActivity"
+    android:animateLayoutChanges="true">
 
     <!--
     This layout is a two-pane layout for the Movies
@@ -16,14 +17,12 @@
     -->
 
     <android.support.v7.widget.RecyclerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/rv_movie_list"
         android:name="com.rafaelguimas.search.MovieListFragment"
-        android:layout_width="@dimen/item_width"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.rafaelguimas.movies.activity.MovieListActivity" />
+        tools:context="com.rafaelguimas.movies.activity.MovieListActivity"
+        android:layout_width="500dp" />
 
     <FrameLayout
         android:id="@+id/movie_detail_container"

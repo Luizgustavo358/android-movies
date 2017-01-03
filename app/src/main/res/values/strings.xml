@@ -1,6 +1,10 @@
 <resources>
     <!-- GENERAL -->
-    <string name="app_name">Meus filmes</string>
+    <string name="app_name">Meus Filmes</string>
+    <string name="attention">Atenção</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="undo">Desfazer</string>
 
     <!-- MOVIE LIST -->
     <string name="title_movie_list">Meus filmes</string>
@@ -14,9 +18,31 @@
     <string name="action_add_new_movie">Adicionar novo filme</string>
     <string name="empty_library">Sua bibloteca de filmes esta vazia</string>
     <string name="movie_not_found">Filme não encontrado. Tente novamente.</string>
+    <string name="movie_add_success">Filme adicionado a biblioteca</string>
+    <string name="movie_duplicated">Sua biblioteca já possui este filme</string>
+    <string name="show">Exibir</string>
+    <string name="searching_movie">Buscando filme</string>
+    <string name="movie_del_success">Filme removido</string>
+    <string name="movie_recover_success">Filme restaurado</string>
 
     <!-- MOVIE DETAIL -->
+    <string name="none_movie_selected">Selecione um filme para ver os seus detalhes</string>
+    <string name="del_movies">Remover filme</string>
     <string name="title_movie_detail">Sobre o filme</string>
-    <string name="imdb_rating">IMDB Rating:</string>
+    <string name="action_view_more">Ver mais</string>
+    <string name="metascore">METASCORE</string>
+    <string name="imdb">IMDB</string>
+    <string name="plot">Sinopse:</string>
+    <string name="director">Diretor:</string>
+    <string name="writers">Escritores:</string>
+    <string name="actors">Atores:</string>
+    <string name="language">Linguagens:</string>
+    <string name="genre">Gêneros:</string>
+    <string name="rated">Classificação:</string>
+    <string name="released">Lançamento:</string>
+    <string name="runtime">Duração:</string>
+    <string name="country">Países:</string>
+    <string name="awards">Prêmios:</string>
+    <string name="delete_movie_confirm">Tem certeza que deseja remover esse filme da sua biblioteca?</string>
 
 </resources>

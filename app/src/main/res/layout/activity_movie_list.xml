@@ -70,5 +70,4 @@
             style="@style/Widget.AppCompat.Button.Borderless.Colored" />
     </LinearLayout>
 
-
 </android.support.design.widget.CoordinatorLayout>
