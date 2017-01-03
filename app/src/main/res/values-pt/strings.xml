@@ -5,6 +5,7 @@
     <string name="yes">Sim</string>
     <string name="no">Não</string>
     <string name="undo">Desfazer</string>
+    <string name="error_api">Algo deu errado. Por favor, tente novamente.</string>
 
     <!-- MOVIE LIST -->
     <string name="title_movie_list">Meus filmes</string>
@@ -17,7 +18,7 @@
     <string name="action_add">Adicionar</string>
     <string name="action_add_new_movie">Adicionar novo filme</string>
     <string name="empty_library">Sua bibloteca de filmes esta vazia</string>
-    <string name="movie_not_found">Filme não encontrado. Tente novamente.</string>
+    <string name="movie_not_found">Filme não encontrado. Por favor, tente novamente.</string>
     <string name="movie_add_success">Filme adicionado a biblioteca</string>
     <string name="movie_duplicated">Sua biblioteca já possui este filme</string>
     <string name="show">Exibir</string>

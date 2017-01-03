@@ -15,19 +15,15 @@ public class Util {
 
     private static ProgressDialog progressDialog;
 
-    public static void showProgressDialog(Context context, String title) {
-        // Define o dialog de progresso caso ele nao exista
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage(title);
-        }
-
+    public static void showProgressDialog(Context context, String message) {
         // Exibe o dialog
-        progressDialog.show();
+        progressDialog = ProgressDialog.show(context, "", message);
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     public static void dismissProgressDialog() {
         progressDialog.dismiss();
+        progressDialog.cancel();
     }
 
     public static Movie getDeletedMovie(List<Movie> movieList, List<Movie> oldMovieList) {

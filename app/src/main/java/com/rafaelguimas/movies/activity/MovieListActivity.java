@@ -1,5 +1,6 @@
 package com.rafaelguimas.movies.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -29,7 +30,6 @@ import com.rafaelguimas.movies.api.OMDBInterface;
 import com.rafaelguimas.movies.db.MovieDAO;
 import com.rafaelguimas.movies.fragment.MovieDetailFragment;
 import com.rafaelguimas.movies.model.Movie;
-import com.rafaelguimas.movies.model.MovieList;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -191,7 +191,7 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Movie> call, Response<Movie> response) {
                 Log.d(TAG, "API " + (response.isSuccessful()? "success" : "error"));
-//                Util.dismissProgressDialog();
+                Util.dismissProgressDialog();
 
                 // Recupera o filme da resposta da API
                 Movie movie = response.body();
@@ -207,7 +207,9 @@ public class MovieListActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Movie> call, Throwable t) {
-
+                // Exibe mensagem de falha
+                Snackbar.make(coordinatorLayout, R.string.error_api, Snackbar.LENGTH_LONG).show();
+                Util.dismissProgressDialog();
             }
         });
     }
@@ -223,7 +225,7 @@ public class MovieListActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_search, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-//                        Util.showProgressDialog(MovieListActivity.this, getString(R.string.searching_movie));
+                        Util.showProgressDialog(MovieListActivity.this, getString(R.string.searching_movie));
                         showMovieByTitle(((EditText) view.findViewById(R.id.etxt_movie_title)).getText().toString());
                     }
                 })

@@ -5,6 +5,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="undo">Undo</string>
+    <string name="error_api">Something went wrong. Please, try again.</string>
 
     <!-- MOVIE LIST -->
     <string name="title_movie_list">My Movies</string>
@@ -17,7 +18,7 @@
     <string name="action_add">Add</string>
     <string name="action_add_new_movie">Add new movie</string>
     <string name="empty_library">Your movie library is empty</string>
-    <string name="movie_not_found">Movie not found. Try again.</string>
+    <string name="movie_not_found">Movie not found. Please, try again.</string>
     <string name="movie_add_success">Movie add to your library</string>
     <string name="movie_duplicated">Your library already have this movie</string>
     <string name="show">Show</string>
