@@ -12,6 +12,7 @@ Bibliotecas utilizadas:
   <li><a href="http://jakewharton.github.io/butterknife/">ButterKnife</a></li>
   <li><a href="https://square.github.io/retrofit/">Retrofit</a></li>
   <li><a href="http://square.github.io/picasso/">Picasso</a></li>
+  <li><a href="http://facebook.github.io/stetho/">Stheto</a></li>
 </ul>
 
 <br>
