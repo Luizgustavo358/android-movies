@@ -1,48 +1,48 @@
 <resources>
     <!-- GENERAL -->
-    <string name="app_name">Meus Filmes</string>
-    <string name="attention">Atenção</string>
-    <string name="yes">Sim</string>
-    <string name="no">Não</string>
-    <string name="undo">Desfazer</string>
+    <string name="app_name">My Movies</string>
+    <string name="attention">Attention</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="undo">Undo</string>
 
     <!-- MOVIE LIST -->
-    <string name="title_movie_list">Meus filmes</string>
-    <string name="add_movies">Adicionar filme</string>
-    <string name="title_dialog_add">Adicionar filme</string>
-    <string name="title_dialog_details">Detalhes</string>
-    <string name="hint_movie_title">Título do filme</string>
-    <string name="action_search">Buscar</string>
-    <string name="action_cancel">Cancelar</string>
-    <string name="action_add">Adicionar</string>
-    <string name="action_add_new_movie">Adicionar novo filme</string>
-    <string name="empty_library">Sua bibloteca de filmes esta vazia</string>
-    <string name="movie_not_found">Filme não encontrado. Tente novamente.</string>
-    <string name="movie_add_success">Filme adicionado a biblioteca</string>
-    <string name="movie_duplicated">Sua biblioteca já possui este filme</string>
-    <string name="show">Exibir</string>
-    <string name="searching_movie">Buscando filme</string>
-    <string name="movie_del_success">Filme removido</string>
-    <string name="movie_recover_success">Filme restaurado</string>
+    <string name="title_movie_list">My Movies</string>
+    <string name="add_movies">Add movie</string>
+    <string name="title_dialog_add">Add movie</string>
+    <string name="title_dialog_details">Details</string>
+    <string name="hint_movie_title">Movie Title</string>
+    <string name="action_search">Search</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_add">Add</string>
+    <string name="action_add_new_movie">Add new movie</string>
+    <string name="empty_library">Your movie library is empty</string>
+    <string name="movie_not_found">Movie not found. Try again.</string>
+    <string name="movie_add_success">Movie add to your library</string>
+    <string name="movie_duplicated">Your library already have this movie</string>
+    <string name="show">Show</string>
+    <string name="searching_movie">Searching movie</string>
+    <string name="movie_del_success">Movie removed</string>
+    <string name="movie_recover_success">Movie restored</string>
 
     <!-- MOVIE DETAIL -->
-    <string name="none_movie_selected">Selecione um filme para ver os seus detalhes</string>
-    <string name="del_movies">Remover filme</string>
-    <string name="title_movie_detail">Sobre o filme</string>
-    <string name="action_view_more">Ver mais</string>
+    <string name="none_movie_selected">Select a movie to see details</string>
+    <string name="del_movies">Remove movie</string>
+    <string name="title_movie_detail">About the movie</string>
+    <string name="action_view_more">See more</string>
     <string name="metascore">METASCORE</string>
     <string name="imdb">IMDB</string>
-    <string name="plot">Sinopse:</string>
-    <string name="director">Diretor:</string>
-    <string name="writers">Escritores:</string>
-    <string name="actors">Atores:</string>
-    <string name="language">Linguagens:</string>
-    <string name="genre">Gêneros:</string>
-    <string name="rated">Classificação:</string>
-    <string name="released">Lançamento:</string>
-    <string name="runtime">Duração:</string>
-    <string name="country">Países:</string>
-    <string name="awards">Prêmios:</string>
-    <string name="delete_movie_confirm">Tem certeza que deseja remover esse filme da sua biblioteca?</string>
+    <string name="plot">Plot:</string>
+    <string name="director">Director:</string>
+    <string name="writers">Writers:</string>
+    <string name="actors">Actors:</string>
+    <string name="language">Language:</string>
+    <string name="genre">Genres:</string>
+    <string name="rated">Rated:</string>
+    <string name="released">Released:</string>
+    <string name="runtime">Runtime:</string>
+    <string name="country">Country:</string>
+    <string name="awards">Awards:</string>
+    <string name="delete_movie_confirm">Are you sure you want to remove this movie from your library?</string>
 
 </resources>

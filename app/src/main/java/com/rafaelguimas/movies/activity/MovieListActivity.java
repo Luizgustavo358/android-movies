@@ -59,6 +59,7 @@ public class MovieListActivity extends AppCompatActivity {
     @BindView(R.id.layout_empty) LinearLayout layoutEmpty;
     @BindView(R.id.btn_add_movie) Button btnAddMovie;
     @BindView(R.id.rv_movie_list) RecyclerView recyclerView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     // Variaveis de controle
     private MovieListAdapter adapter;
@@ -73,7 +74,6 @@ public class MovieListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         // Setup da toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_movie_list);
         setSupportActionBar(toolbar);
 
@@ -108,8 +108,6 @@ public class MovieListActivity extends AppCompatActivity {
 
         // Carrega os filmes do BD local
         showMovies();
-
-//        saveMoviesBySearch("Batman");
     }
 
     @Override
@@ -177,7 +175,8 @@ public class MovieListActivity extends AppCompatActivity {
                                 Snackbar.make(coordinatorLayout, R.string.movie_recover_success, Snackbar.LENGTH_SHORT).show();
 
                                 // Atualiza a lista
-                                showMovies();
+                                movieList.add(deletedMovie);
+                                adapter.notifyItemInserted(movieList.size()-1);
                             }
                         }
                     })
