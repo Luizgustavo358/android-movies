@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,6 +48,11 @@ public class MovieListActivity extends AppCompatActivity {
 
     // Flag para indicar o tipo de visualizacao
     private boolean isTwoPanel;
+
+    // Quantidades de colunas
+    private int tabletColumns = 5;
+    private int phonePortraitColumns = 3;
+    private int phoneLandscapeColumns = 5;
 
     // Views
     @BindView(R.id.coordinator_layout) CoordinatorLayout coordinatorLayout;
@@ -93,7 +99,7 @@ public class MovieListActivity extends AppCompatActivity {
         });
 
         // Define o layout da RV
-        recyclerView.setLayoutManager(new GridLayoutManager(this, isTwoPanel? 5 : 3));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, isTwoPanel? tabletColumns : phonePortraitColumns));
 
         // Cria o adaptador
         adapter = new MovieListAdapter(MovieListActivity.this, movieList, isTwoPanel);
@@ -128,6 +134,21 @@ public class MovieListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        // Verifica o layout
+        if (!isTwoPanel) {
+            int columns;
+
+            // Verifica a orientacao do celular (Portrait/Landscape)
+            if (getWindowManager().getDefaultDisplay().getRotation() == Surface.ROTATION_0) { // Portrait
+                columns = phonePortraitColumns;
+            } else { // Landscape
+                columns = phoneLandscapeColumns;
+            }
+
+            // Define o layout da RV
+            recyclerView.setLayoutManager(new GridLayoutManager(this, columns));
+        }
 
         // Guarda o tamanho da lista antes de atualizar
         final List<Movie> oldMovieList = new ArrayList<>();
@@ -275,13 +296,11 @@ public class MovieListActivity extends AppCompatActivity {
         movieList.clear();
         movieList.addAll(movieDAO.loadMovies());
 
-        if (movieList.size() > 0) {
-            // Esconde layout de lista vazia
-            layoutEmpty.setVisibility(View.GONE);
+        // Esconde/Exibe layout de lista vazia
+        layoutEmpty.setVisibility(movieList.size() > 0? View.GONE : View.VISIBLE);
 
-            // Atualiza a lista
-            adapter.notifyDataSetChanged();
-        }
+        // Atualiza a lista
+        adapter.notifyDataSetChanged();
     }
 
     public void notifyAdapterRemove(Movie movie) {
@@ -289,57 +308,5 @@ public class MovieListActivity extends AppCompatActivity {
         adapter.notifyItemRemoved(movieList.indexOf(movie));
         // Remove o filme da lista
         movieList.remove(movie);
-    }
-
-    public void saveMoviesBySearch(String searchText) {
-        OMDBInterface omdbInterface = OMDBClient.getClient().create(OMDBInterface.class);
-        Call<MovieList> call = omdbInterface.getMoviesBySearch(searchText);
-        call.enqueue(new Callback<MovieList>() {
-            @Override
-            public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-                Log.d(TAG, "API " + (response.isSuccessful()? "success" : "error"));
-
-                // Recupera a lista de filmes da resposta da API
-                MovieList movieList = response.body();
-
-                // Salva a lista no BD local
-                MovieDAO movieDAO = new MovieDAO(MovieListActivity.this);
-                for (Movie movie : movieList.getSearch()) {
-                    movieDAO.saveMovie(movie);
-                }
-
-                // Atualiza a lista
-                showMovies();
-            }
-
-            @Override
-            public void onFailure(Call<MovieList> call, Throwable t) {
-
-            }
-        });
-    }
-
-    public void getMoviesByTitle(String title) {
-        OMDBInterface omdbInterface = OMDBClient.getClient().create(OMDBInterface.class);
-        Call<Movie> call = omdbInterface.getMoviesByTitle(title);
-        call.enqueue(new Callback<Movie>() {
-            @Override
-            public void onResponse(Call<Movie> call, Response<Movie> response) {
-                Log.d(TAG, "API " + (response.isSuccessful()? "success" : "error"));
-
-                // Recupera o filme da resposta da API
-                Movie movie = response.body();
-                movieList.add(movie);
-                // Verifica se foi encontrado
-                assert recyclerView != null;
-                // Atualiza a lista
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<Movie> call, Throwable t) {
-
-            }
-        });
     }
 }

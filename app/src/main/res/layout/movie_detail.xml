@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        app:fabSize="mini"
+        app:fabSize="normal"
         app:srcCompat="@drawable/ic_delete_white_24dp"
         android:id="@+id/btn_delete_movie"
         android:layout_alignParentBottom="true"
