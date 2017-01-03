@@ -1,8 +1,8 @@
 # android-search
 Aplicativo para cadastrar filmes por nome. As demais informações do título são buscadas utilizando a OMDb API.
 
-<img src="https://github.com/Rafaellg/android-movies/blob/master/imgs/img_smartphone.png?raw=true" widht="200">
-<img src="https://github.com/Rafaellg/android-movies/blob/master/imgs/img_tablet.png?raw=true" widht="200">
+<img src="https://github.com/Rafaellg/android-movies/blob/master/imgs/img_smartphone.png?raw=true" width="200">
+<img src="https://github.com/Rafaellg/android-movies/blob/master/imgs/img_tablet.png?raw=true" width="200">
 
 OMDB API: <a href="https://www.omdbapi.com/"> API </a>
 
